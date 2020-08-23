@@ -56,15 +56,16 @@ trait SomeTrait { }
 
 fn main() {
     println!("======== The size of different pointers in Rust: ========");
-    println!("&dyn Trait:-----{}", size_of::<&dyn SomeTrait>());
-    println!("&[&dyn Trait]:--{}", size_of::<&[&dyn SomeTrait]>());
-    println!("Box<Trait>:-----{}", size_of::<Box<SomeTrait>>());
-    println!("&i32:-----------{}", size_of::<&i32>());
-    println!("&[i32]:---------{}", size_of::<&[i32]>());
-    println!("Box<i32>:-------{}", size_of::<Box<i32>>());
-    println!("&Box<i32>:------{}", size_of::<&Box<i32>>());
-    println!("[&dyn Trait;4]:-{}", size_of::<[&dyn SomeTrait; 4]>());
-    println!("[i32;4]:--------{}", size_of::<[i32; 4]>());
+    println!("&dyn Trait:------{}", size_of::<&dyn SomeTrait>());
+    println!("&[&dyn Trait]:---{}", size_of::<&[&dyn SomeTrait]>());
+    println!("Box<Trait>:------{}", size_of::<Box<SomeTrait>>());
+    println!("Box<Box<Trait>>:-{}", size_of::<Box<Box<SomeTrait>>>());
+    println!("&i32:------------{}", size_of::<&i32>());
+    println!("&[i32]:----------{}", size_of::<&[i32]>());
+    println!("Box<i32>:--------{}", size_of::<Box<i32>>());
+    println!("&Box<i32>:-------{}", size_of::<&Box<i32>>());
+    println!("[&dyn Trait;4]:--{}", size_of::<[&dyn SomeTrait; 4]>());
+    println!("[i32;4]:---------{}", size_of::<[i32; 4]>());
 }
 ```
 
@@ -98,6 +99,7 @@ Let's explain this in code instead of words by implementing our own trait
 object from these parts:
 
 ```rust
+# use std::mem::{align_of, size_of};
 // A reference to a trait object is a fat pointer: (data_ptr, vtable_ptr)
 trait Test {
     fn add(&self) -> i32;
@@ -138,9 +140,9 @@ fn main() {
     // format where the three first values has a special meaning like the
     // length of the array is encoded in the array itself as the second value.
     let vtable = vec![
-        0,            // pointer to `Drop` (which we're not implementing here)
-        6,            // length of vtable
-        8,            // alignment
+        0,                  // pointer to `Drop` (which we're not implementing here)
+        size_of::<Data>(),  // length of data
+        align_of::<Data>(), // alignment of data
 
         // we need to make sure we add these in the same order as defined in the Trait.
         add as usize, // function pointer - try changing the order of `add`
