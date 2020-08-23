@@ -137,8 +137,8 @@ fn mul(s: &Data) -> i32 {
 fn main() {
     let mut data = Data {a: 3, b: 2};
     // vtable is like special purpose array of pointer-length types with a fixed
-    // format where the three first values has a special meaning like the
-    // length of the array is encoded in the array itself as the second value.
+    // format where the three first values contains some general information like
+    // a pointer to drop and the length and data alignment of `data`.
     let vtable = vec![
         0,                  // pointer to `Drop` (which we're not implementing here)
         size_of::<Data>(),  // length of data
