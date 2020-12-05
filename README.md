@@ -27,11 +27,13 @@ articles about async runtimes and executors, and if the rumors are right there
 is more to come from him in the near future.
 
 The way you should go about it is to read this book first, then continue
-reading the [articles from stejpang](https://stjepang.github.io/) to learn more
+reading the [articles from stejpang](https://web.archive.org/web/20200610130514/https://stjepang.github.io/) to learn more
 about runtimes and how they work, especially:
 
-1. [Build your own block_on()](https://stjepang.github.io/2020/01/25/build-your-own-block-on.html)
-2. [Build your own executor](https://stjepang.github.io/2020/01/31/build-your-own-executor.html)
+1. [Build your own block_on()](https://web.archive.org/web/20200511234503/https://stjepang.github.io/2020/01/25/build-your-own-block-on.html)
+2. [Build your own executor](https://web.archive.org/web/20200207092849/https://stjepang.github.io/2020/01/31/build-your-own-executor.html)
+
+> Sorry for the archive links. The original site doesn't exist anymore.
 
 ## Contributing
 
@@ -45,7 +47,7 @@ Feedback, questions or discussion is welcome in the issue tracker.
 
 **2020-04-06:** Final draft finished
 
-**2020-04-10:** Rather substantial rewrite of the `Reactor` to better the 
+**2020-04-10:** Rather substantial rewrite of the `Reactor` to better the
 readability and make it easier to reason about. In addition I fixed a mistake
 in the `Poll` method and a possible race condition. See #2 for more details.
 
