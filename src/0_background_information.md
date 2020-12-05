@@ -149,32 +149,30 @@ _**Press the expand icon in the top right corner to show the example code.**_
 
 ```rust, edition2018
 # #![feature(llvm_asm, naked_functions)]
-# use std::ptr;
-#
+# 
 # const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2;
 # const MAX_THREADS: usize = 4;
 # static mut RUNTIME: usize = 0;
-#
+# 
 # pub struct Runtime {
 #     threads: Vec<Thread>,
 #     current: usize,
 # }
-#
+# 
 # #[derive(PartialEq, Eq, Debug)]
 # enum State {
 #     Available,
 #     Running,
 #     Ready,
 # }
-#
+# 
 # struct Thread {
 #     id: usize,
 #     stack: Vec<u8>,
 #     ctx: ThreadContext,
 #     state: State,
-#     task: Option<Box<dyn Fn()>>,
 # }
-#
+# 
 # #[derive(Debug, Default)]
 # #[repr(C)]
 # struct ThreadContext {
@@ -185,9 +183,8 @@ _**Press the expand icon in the top right corner to show the example code.**_
 #     r12: u64,
 #     rbx: u64,
 #     rbp: u64,
-#     thread_ptr: u64,
 # }
-#
+# 
 # impl Thread {
 #     fn new(id: usize) -> Self {
 #         Thread {
@@ -195,11 +192,10 @@ _**Press the expand icon in the top right corner to show the example code.**_
 #             stack: vec![0_u8; DEFAULT_STACK_SIZE],
 #             ctx: ThreadContext::default(),
 #             state: State::Available,
-#             task: None,
 #         }
 #     }
 # }
-#
+# 
 # impl Runtime {
 #     pub fn new() -> Self {
 #         let base_thread = Thread {
@@ -207,39 +203,37 @@ _**Press the expand icon in the top right corner to show the example code.**_
 #             stack: vec![0_u8; DEFAULT_STACK_SIZE],
 #             ctx: ThreadContext::default(),
 #             state: State::Running,
-#             task: None,
 #         };
-#
+# 
 #         let mut threads = vec![base_thread];
-#         threads[0].ctx.thread_ptr = &threads[0] as *const Thread as u64;
 #         let mut available_threads: Vec<Thread> = (1..MAX_THREADS).map(|i| Thread::new(i)).collect();
 #         threads.append(&mut available_threads);
-#
+# 
 #         Runtime {
 #             threads,
 #             current: 0,
 #         }
 #     }
-#
+# 
 #     pub fn init(&self) {
 #         unsafe {
 #             let r_ptr: *const Runtime = self;
 #             RUNTIME = r_ptr as usize;
 #         }
 #     }
-#
+# 
 #     pub fn run(&mut self) -> ! {
 #         while self.t_yield() {}
 #         std::process::exit(0);
 #     }
-#
+# 
 #     fn t_return(&mut self) {
 #         if self.current != 0 {
 #             self.threads[self.current].state = State::Available;
 #             self.t_yield();
 #         }
 #     }
-#
+# 
 #     fn t_yield(&mut self) -> bool {
 #         let mut pos = self.current;
 #         while self.threads[pos].state != State::Ready {
@@ -251,92 +245,84 @@ _**Press the expand icon in the top right corner to show the example code.**_
 #                 return false;
 #             }
 #         }
-#
+# 
 #         if self.threads[self.current].state != State::Available {
 #             self.threads[self.current].state = State::Ready;
 #         }
-#
+# 
 #         self.threads[pos].state = State::Running;
 #         let old_pos = self.current;
 #         self.current = pos;
-#
+# 
 #         unsafe {
-#             switch(&mut self.threads[old_pos].ctx, &self.threads[pos].ctx);
+#             let old: *mut ThreadContext = &mut self.threads[old_pos].ctx;
+#             let new: *const ThreadContext = &self.threads[pos].ctx;
+#             llvm_asm!(
+#                 "mov $0, %rdi
+#                  mov $1, %rsi"::"r"(old), "r"(new)
+#             );
+#             switch();
 #         }
-#         true
+#         self.threads.len() > 0
 #     }
-#
-#     pub fn spawn<F: Fn() + 'static>(f: F){
+# 
+#     pub fn spawn(&mut self, f: fn()) {
+#         let available = self
+#             .threads
+#             .iter_mut()
+#             .find(|t| t.state == State::Available)
+#             .expect("no available thread.");
+# 
+#         let size = available.stack.len();
 #         unsafe {
-#             let rt_ptr = RUNTIME as *mut Runtime;
-#             let available = (*rt_ptr)
-#                 .threads
-#                 .iter_mut()
-#                 .find(|t| t.state == State::Available)
-#                 .expect("no available thread.");
-#
-#             let size = available.stack.len();
-#             let s_ptr = available.stack.as_mut_ptr();
-#             available.task = Some(Box::new(f));
-#             available.ctx.thread_ptr = available as *const Thread as u64;
-#             ptr::write(s_ptr.offset((size - 8) as isize) as *mut u64, guard as u64);
-#             ptr::write(s_ptr.offset((size - 16) as isize) as *mut u64, call as u64);
-#             available.ctx.rsp = s_ptr.offset((size - 16) as isize) as u64;
-#             available.state = State::Ready;
+#             let s_ptr = available.stack.as_mut_ptr().offset(size as isize);
+#             let s_ptr = (s_ptr as usize & !15) as *mut u8;
+#             std::ptr::write(s_ptr.offset(-16) as *mut u64, guard as u64);
+#             std::ptr::write(s_ptr.offset(-24) as *mut u64, skip as u64);
+#             std::ptr::write(s_ptr.offset(-32) as *mut u64, f as u64);
+#             available.ctx.rsp = s_ptr.offset(-32) as u64;
 #         }
+#         available.state = State::Ready;
 #     }
 # }
-#
-# fn call(thread: u64) {
-#     let thread = unsafe { &*(thread as *const Thread) };
-#     if let Some(f) = &thread.task {
-#         f();
-#     }
-# }
-#
+# 
 # #[naked]
+# fn skip() { }
+# 
 # fn guard() {
 #     unsafe {
 #         let rt_ptr = RUNTIME as *mut Runtime;
-#         let rt = &mut *rt_ptr;
-#         println!("THREAD {} FINISHED.", rt.threads[rt.current].id);
-#         rt.t_return();
+#         (*rt_ptr).t_return();
 #     };
 # }
-#
+# 
 # pub fn yield_thread() {
 #     unsafe {
 #         let rt_ptr = RUNTIME as *mut Runtime;
 #         (*rt_ptr).t_yield();
 #     };
 # }
-#
+# 
 # #[naked]
 # #[inline(never)]
-# unsafe fn switch(old: *mut ThreadContext, new: *const ThreadContext) {
+# unsafe fn switch() {
 #     llvm_asm!("
-#         mov     %rsp, 0x00($0)
-#         mov     %r15, 0x08($0)
-#         mov     %r14, 0x10($0)
-#         mov     %r13, 0x18($0)
-#         mov     %r12, 0x20($0)
-#         mov     %rbx, 0x28($0)
-#         mov     %rbp, 0x30($0)
-#
-#         mov     0x00($1), %rsp
-#         mov     0x08($1), %r15
-#         mov     0x10($1), %r14
-#         mov     0x18($1), %r13
-#         mov     0x20($1), %r12
-#         mov     0x28($1), %rbx
-#         mov     0x30($1), %rbp
-#         mov     0x38($1), %rdi
-#         ret
+#         mov     %rsp, 0x00(%rdi)
+#         mov     %r15, 0x08(%rdi)
+#         mov     %r14, 0x10(%rdi)
+#         mov     %r13, 0x18(%rdi)
+#         mov     %r12, 0x20(%rdi)
+#         mov     %rbx, 0x28(%rdi)
+#         mov     %rbp, 0x30(%rdi)
+# 
+#         mov     0x00(%rsi), %rsp
+#         mov     0x08(%rsi), %r15
+#         mov     0x10(%rsi), %r14
+#         mov     0x18(%rsi), %r13
+#         mov     0x20(%rsi), %r12
+#         mov     0x28(%rsi), %rbx
+#         mov     0x30(%rsi), %rbp
 #         "
-#     :
-#     : "r"(old), "r"(new)
-#     :
-#     : "alignstack"
 #     );
 # }
 # #[cfg(not(windows))]
@@ -541,7 +527,7 @@ async function run() {
 
 You can consider the `run` function as a _pausable_ task consisting of several
 sub-tasks. On each "await" point it yields control to the scheduler (in this
-case it's the well-known JavaScript event loop). 
+case it's the well-known JavaScript event loop).
 
 Once one of the sub-tasks changes state to either `fulfilled` or `rejected`, the
 task is scheduled to continue to the next step.
@@ -549,8 +535,8 @@ task is scheduled to continue to the next step.
 Syntactically, Rust's Futures 0.1 was a lot like the promises example above, and
 Rust's Futures 0.3 is a lot like async/await in our last example.
 
-Now this is also where the similarities between JavaScript promises and Rust's 
-Futures stop. The reason we go through all this is to get an introduction and 
+Now this is also where the similarities between JavaScript promises and Rust's
+Futures stop. The reason we go through all this is to get an introduction and
 get into the right mindset for exploring Rust's Futures.
 
 > To avoid confusion later on: There's one difference you should know. JavaScript
