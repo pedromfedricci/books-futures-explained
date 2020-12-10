@@ -557,7 +557,7 @@ code.
 "read only" memory or anything fancy. It only uses the type system to prevent
 certain operations on this value.
 
-1. Most standard library types implement `Unpin`. The same goes for most
+4. Most standard library types implement `Unpin`. The same goes for most
 "normal" types you encounter in Rust. `Future`s and `Generator`s are two
 exceptions.
 
