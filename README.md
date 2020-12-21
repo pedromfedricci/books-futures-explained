@@ -56,6 +56,10 @@ can use a `Condvar` and a `Mutex` to create a proper `Parker`. Updated the [Fini
 a few lines over my initial promis of keeping the example below 200 LOC but the I think the inclusion
 is worth it.
 
+**2020-12-21:** Rewrote the "Runtimes" paragraph of chapter 2 adding a useful model to understand
+how runtimes work and included a lot of the suggested text from @ckaran in #25. Added a GIF which
+tries to help visualize what's going on when a Future gets polled.
+
 ## License
 
 This book is MIT licensed.
