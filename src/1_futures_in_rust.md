@@ -99,20 +99,57 @@ you'll see that there are several similarities between these kind of runtimes, s
 learning one makes learning the next much easier.
 
 The difference between Rust and other languages is that you have to make an
-active choice when it comes to picking a runtime. Most often in other languages, 
+active choice when it comes to picking a runtime. Most often in other languages,
 you'll just use the one provided for you.
 
-**An async runtime can be divided into two parts:**
+### A useful mental model of an async runtime
 
-1. The Executor
-2. The Reactor
+I find it easier to reason about how Futures work by creating a high level mental model we can use.
+To do that I have to introduce the concept of a runtime which will drive our Futures to completion.
 
-When Rusts Futures were designed there was a desire to separate the job of
-notifying a `Future` that it can do more work, and actually doing the work
-on the `Future`.
+>Please note that the mental model I create here is not the *only* way to drive Futures to
+completion and that Rust’s Futures does not impose any restrictions on how you actually accomplish
+this task.
 
-You can think of the former as the reactor's job, and the latter as the
-executors job. These two parts of a runtime interact with each other using the `Waker` type.
+**A fully working async system in Rust can be divided into three parts:**
+
+1. Reactor
+2. Executor
+3. Future
+
+So, how does these three parts work together? They do that through an object called the `Waker`.
+The `Waker` is how the reactor tells the executor that a specific Future is ready to run. Once you
+understand the lifecycle and ownership of a Waker, you'll understand how futures work from a user's
+perspective. Here is the lifecycle:
+
+- A Waker is created by the **executor**
+- When a guture is registered with an executor, it’s given a clone of the Waker object created by
+the executor. Since this is a shared object (e.g. an `Arc<T>`), all clones actually point to the
+same underlying object
+- The future clones the Waker and passes it to the reactor, which stores it to use later.
+
+At some point in the future, the reactor will decide that the future is ready to run. It will wake
+the future via the Waker that it stored. This action will do what is necessary to get the executor
+in a position to poll the future.
+
+The Waker object implements everything that we associate with
+[task](https://doc.rust-lang.org/std/task/index.html). The object is specific to the type of
+executor in use, but all Wakers share a similar interface (it's not a trait because
+embedded systems can't handle trait objects, but a useful abstraction is to think of it as a trait
+object).
+
+Since the interface is the same across all executors, reactors can _in theory_ be completely
+oblivious to the type of the executor, and vice-versa. **Executors and reactors never need to
+communicate with one another directly.**.
+
+This design is what gives the futures framework it's power and flexibility and allows the Rust
+standard library to provide an ergonomic, zero-cost abstraction for us to use.
+
+In an effort to try to visualize how these parts work together in a simple program I created this
+GIF. Note that the code is "pseudo-Rust" to help us focus on the important parts:
+
+#### Fig 2: Simplified flow in an async system
+![futures_animation](./assets/futures_animation.gif)
 
 The two most popular runtimes for Futures as of writing this is:
 

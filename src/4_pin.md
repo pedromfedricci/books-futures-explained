@@ -264,7 +264,7 @@ it's easy to create serious bugs using this code.
 
 I created a diagram to help visualize what's going on:
 
-**Fig 1: Before and after swap**
+**Fig 2: Before and after swap**
 ![swap_problem](./assets/swap_problem.jpg)
 
 As you can see this results in unwanted behavior. It's easy to get this to
