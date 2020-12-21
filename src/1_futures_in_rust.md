@@ -123,7 +123,7 @@ understand the lifecycle and ownership of a Waker, you'll understand how futures
 perspective. Here is the lifecycle:
 
 - A Waker is created by the **executor**
-- When a guture is registered with an executor, it’s given a clone of the Waker object created by
+- When a future is registered with an executor, it’s given a clone of the Waker object created by
 the executor. Since this is a shared object (e.g. an `Arc<T>`), all clones actually point to the
 same underlying object
 - The future clones the Waker and passes it to the reactor, which stores it to use later.
