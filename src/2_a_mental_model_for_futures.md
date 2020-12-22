@@ -1,11 +1,15 @@
-# Get a mental model of how Futures and runtimes work
+# A mental model of how Futures and runtimes work
 
-In this chapter we'll try to build a high level mental model of how Futures and
-runtimes work together. Just note that the code itself is "pseudo-rust" due to space
-restrictions and clarity. The main goal in this part is to create a high level
-understanding to make it easier to learn. This is not the only way to model this
-since we're making assumtions on runtime specifics that can vary a great deal,
-but it's the way I found it easiest to build upon.
+The main goal in this part is to build a high level
+mental model of how the different pieces we read about in the previos chapter
+works toghether. I hope this will make it easier to understand what we just read
+about in the previous chapter and also explain why we take a deep dive into topics
+like trait objects and generators in the next few chapters.
+
+This is not the only way to model this since we're making assumtions on runtime
+specifics that can vary a great deal, but it's the way I found it easiest to
+build upon. Finally, please note that the code itself is "pseudo-rust" due to
+the need for brevity and clarity.
 
 >Click on a page to open a larger view of it in a new tab.
 >
