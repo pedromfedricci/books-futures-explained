@@ -145,11 +145,8 @@ communicate with one another directly.**.
 This design is what gives the futures framework it's power and flexibility and allows the Rust
 standard library to provide an ergonomic, zero-cost abstraction for us to use.
 
-In an effort to try to visualize how these parts work together in a simple program I created this
-GIF. Note that the code is "pseudo-Rust" to help us focus on the important parts:
-
-#### Fig 2: Simplified flow in an async system
-![futures_animation](./assets/futures_animation.gif)
+In an effort to try to visualize how these parts work together I put together
+a set of slides in the next chapter that I hope will help.
 
 The two most popular runtimes for Futures as of writing this is:
 
