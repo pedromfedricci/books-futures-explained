@@ -41,6 +41,9 @@ All kinds of contributions are welcome. Spelling, wording or clarifications are
 very welcome as well as adding or suggesting changes to the content. I'd appreciate
 if you contribute through a PR.
 
+The images in chapter 3 is created using Power Point. The power point itself is located in the
+"resources" folder.
+
 Feedback, questions or discussion is welcome in the issue tracker.
 
 ## Changelog
@@ -57,8 +60,9 @@ a few lines over my initial promis of keeping the example below 200 LOC but the 
 is worth it.
 
 **2020-12-21:** Rewrote the "Runtimes" paragraph of chapter 2 adding a useful model to understand
-how runtimes work and included a lot of the suggested text from @ckaran in #25. Added a GIF which
-tries to help visualize what's going on when a Future gets polled.
+how runtimes work and included a lot of the suggested text from @ckaran in #25. Added a new chapter
+"3 A mental model of how Futures work" which tries to visualize and give a good mental model to
+build upon.
 
 ## License
 
