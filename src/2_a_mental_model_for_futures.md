@@ -2,7 +2,7 @@
 
 The main goal in this part is to build a high level
 mental model of how the different pieces we read about in the previous chapter
-works toghether. I hope this will make it easier to understand what we just read
+works together. I hope this will make it easier to understand what we just read
 about in the previous chapter and also explain why we take a deep dive into topics
 like trait objects and generators in the next few chapters.
 
