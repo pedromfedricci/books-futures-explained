@@ -6,7 +6,7 @@ works toghether. I hope this will make it easier to understand what we just read
 about in the previous chapter and also explain why we take a deep dive into topics
 like trait objects and generators in the next few chapters.
 
-This is not the only way to model this since we're making assumtions on runtime
+This is not the only way to model this since we're making assumptions on runtime
 specifics that can vary a great deal, but it's the way I found it easiest to
 build upon. Finally, please note that the code itself is "pseudo-rust" due to
 the need for brevity and clarity.
