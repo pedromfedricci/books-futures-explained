@@ -119,8 +119,8 @@ this task.
 
 So, how does these three parts work together? They do that through an object called the `Waker`.
 The `Waker` is how the reactor tells the executor that a specific Future is ready to run. Once you
-understand the lifecycle and ownership of a Waker, you'll understand how futures work from a user's
-perspective. Here is the lifecycle:
+understand the life cycle and ownership of a Waker, you'll understand how futures work from a user's
+perspective. Here is the life cycle:
 
 - A Waker is created by the **executor**
 - When a future is registered with an executor, it’s given a clone of the Waker object created by

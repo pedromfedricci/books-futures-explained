@@ -56,7 +56,7 @@ in the `Poll` method and a possible race condition. See #2 for more details.
 
 **2020-04-13:** Added a "bonus section" to the [Implementing Futures chapter](https://cfsamson.github.io/books-futures-explained/6_future_example.html) where we avoid using `thread::park` and instead show how we
 can use a `Condvar` and a `Mutex` to create a proper `Parker`. Updated the [Finished Example](https://cfsamson.github.io/books-futures-explained/8_finished_example.html) to reflect these changes. Unfortunately, this led us
-a few lines over my initial promis of keeping the example below 200 LOC but the I think the inclusion
+a few lines over my initial promise of keeping the example below 200 LOC but the I think the inclusion
 is worth it.
 
 **2020-12-21:** Rewrote the "Runtimes" paragraph of chapter 2 adding a useful model to understand

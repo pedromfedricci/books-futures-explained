@@ -677,7 +677,7 @@ The last point is relevant when we move on the the last paragraph.
 > also look at ways to fix it. For now, just make a note of it so you're aware
 > of the problem.
 
-## Async/Await and concurrecy
+## Async/Await and concurrency
 
 The `async` keyword can be used on functions as in `async fn(...)` or on a
 block as in `async { ... }`. Both will turn your function, or block, into a

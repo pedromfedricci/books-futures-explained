@@ -30,7 +30,7 @@ thing in a slightly different way to get some inspiration.
 * Do you want to pass around a reference to this information using an `Arc`?
 * Do you want to make a global `Reactor` so it can be accessed from anywhere?
 
-### Building a better exectuor
+### Building a better executor
 
 Right now, we can only run one and one future only. Most runtimes has a `spawn`
 function which let's you start off a future and `await` it later so you
