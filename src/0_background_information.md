@@ -522,8 +522,8 @@ function timer(ms) {
 }
 
 timer(200)
-.then(() => return timer(100))
-.then(() => return timer(50))
+.then(() => timer(100))
+.then(() => timer(50))
 .then(() => console.log("I'm the last one"));
 ```
 
