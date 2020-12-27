@@ -140,7 +140,7 @@ object).
 
 Since the interface is the same across all executors, reactors can _in theory_ be completely
 oblivious to the type of the executor, and vice-versa. **Executors and reactors never need to
-communicate with one another directly.**.
+communicate with one another directly.**
 
 This design is what gives the futures framework it's power and flexibility and allows the Rust
 standard library to provide an ergonomic, zero-cost abstraction for us to use.
