@@ -122,11 +122,15 @@ The `Waker` is how the reactor tells the executor that a specific Future is read
 understand the life cycle and ownership of a Waker, you'll understand how futures work from a user's
 perspective. Here is the life cycle:
 
-- A Waker is created by the **executor**
-- When a future is registered with an executor, it’s given a clone of the Waker object created by
-the executor. Since this is a shared object (e.g. an `Arc<T>`), all clones actually point to the
-same underlying object
-- The future clones the Waker and passes it to the reactor, which stores it to use later.
+- A Waker is created by the **executor.** A common, but not required, method is
+  to create a new Waker for each Future that is registered with the executor.
+- When a future is registered with an executor, it’s given a clone of the Waker
+  object created by the executor. Since this is a shared object (e.g. an
+  `Arc<T>`), all clones actually point to the same underlying object.  Thus,
+  anything that calls _any_ clone of the original Waker will wake the particular
+  Future that was registered to it.
+- The future clones the Waker and passes it to the reactor, which stores it to
+  use later.
 
 At some point in the future, the reactor will decide that the future is ready to run. It will wake
 the future via the Waker that it stored. This action will do what is necessary to get the executor
