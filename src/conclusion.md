@@ -11,45 +11,6 @@ I'll leave you with some suggestions for exercises if you want to explore a litt
 
 Until next time!
 
-## Further notes and comments
-
-In [Chapter 2](1_futures_in_rust.md), I mentioned that it is common for the
-executor to create a new Waker for each Future that is registered with the
-executor, but that the Waker is a shared object similar to a `Arc<T>`.  One of
-the reasons for this design is that it allows different Reactors the ability to
-Wake a Future.  As an example of how this can be used, consider how you could
-create a new type of Future that has the ability to be canceled.  A method of
-doing this would be to add an
-[`AtomicBool`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html)
-to the instance of the future, and an extra method called `cancel()`.  The
-`cancel()` method  will first set the
-[`AtomicBool`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html)
-to signal that the future is now canceled, and then immediately call instance's
-own  copy of the Waker.  Once the executor starts executing the Future, the
-_Future_ will know that it was canceled, and will do the appropriate cleanup
-actions to terminate itself.
-
-The main reason for designing the Future in this manner is because we don't have
-to modify either the Executor or the other Reactors; they are all oblivious to
-the change.  The only possible issue is with the design of the Future itself; a
-Future that is canceled still needs to terminate correctly according to the
-rules outlined in the docs for
-[`Future`](https://doc.rust-lang.org/std/future/trait.Future.html).  That means
-that it can't just delete it's resources and then sit there; it needs to return
-a value.  It is up to you to decide if a canceled future will return
-[`Pending`](https://doc.rust-lang.org/std/task/enum.Poll.html#variant.Pending)
-forever, or if it will return a value in
-[`Ready`](https://doc.rust-lang.org/std/task/enum.Poll.html#variant.Ready). Just
-be aware that if other Futures are `await`ing it, they won't be able to start
-until [`Ready`](https://doc.rust-lang.org/std/task/enum.Poll.html#variant.Ready)
-is returned.  A common technique for cancelable Futures is to have them return a
-Result with an error that signals the Future was canceled; that will permit any
-Futures that are awaiting the canceled Future a chance to progress, with the
-knowledge that the Future they depended on was canceled.  There are additional
-concerns as well, but beyond the scope of this book.  Read the documentation and
-code for the [`futures`](https://crates.io/crates/futures) crate for a better
-understanding of what the concerns are.
-
 ## Reader exercises
 
 So our implementation has taken some obvious shortcuts and could use some improvement.

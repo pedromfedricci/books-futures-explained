@@ -12,9 +12,6 @@ build upon. Finally, please note that the code itself is "pseudo-rust" due to
 the need for brevity and clarity.
 
 >Click on a page to open a larger view of it in a new tab.
->
->_Thanks to [@ckaran](https://github.com/ckaran) for feedback and [discussions](https://github.com/cfsamson/books-futures-explained/issues/25) on
-this chapter._
 
 <a href="./assets/slides/Slide1.PNG" target="_blank">
  <img src="./assets/slides/Slide1.PNG" alt="slide1"/>
