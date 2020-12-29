@@ -64,7 +64,7 @@ A special thanks to [jonhoo](https://twitter.com/jonhoo) who was kind enough to
 give me some valuable feedback on a very early draft of this book. He has not
 read the finished product, but a big thanks is definitely due.
 
-Thanks to [@ckaran](https://github.com/ckaran) for feedback and discussions on chapter 2 and 3.
+Thanks to [@ckaran](https://github.com/ckaran) for suggestions and contributions in chapter 2 and 3.
 
 ## Translations
 
