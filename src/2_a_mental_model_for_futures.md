@@ -8,7 +8,7 @@ few chapters.
 
 This is not the only way to create a model of an async system since we're making
 assumptions on runtime specifics that can vary a great deal. It's the way I found
-it easiest to build upon and it's relevant for understandig a lot of real
+it easiest to build upon and it's relevant for understanding a lot of real
 implementations you'll find in the async ecosystem. Finally,
 
 please note that the code itself is "pseudo-rust" due to the need for brevity
