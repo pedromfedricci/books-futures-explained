@@ -165,7 +165,7 @@ future through the `Future` trait.
 the `async` and `await` keywords.
 3. A defined interface to wake up a suspended task through the `Waker` type.
 
-That's really what Rusts standard library does. As you see there is no definition
+That's really what Rust's standard library does. As you see there is no definition
 of non-blocking I/O, how these tasks are created, or how they're run.
 
 ## I/O vs CPU intensive tasks
@@ -235,7 +235,7 @@ Take a break or a cup of coffee and get ready as we go for a deep dive in the ne
 
 If you find the concepts of concurrency and async programming confusing in
 general, I know where you're coming from and I have written some resources to
-try to give a high-level overview that will make it easier to learn Rusts
+try to give a high-level overview that will make it easier to learn Rust's
 Futures afterwards:
 
 * [Async Basics - The difference between concurrency and parallelism](https://cfsamson.github.io/book-exploring-async-basics/1_concurrent_vs_parallel.html)
