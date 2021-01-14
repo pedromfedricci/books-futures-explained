@@ -77,9 +77,11 @@ The key to these tasks is that they're able to yield control to the runtime's
 scheduler and then resume execution again where it left off at a later point.
 
 In contrast to leaf futures, these kind of futures do not themselves represent
-an I/O resource. When we poll these futures we either run some code or we yield
-to the scheduler while waiting for some resource to signal us that it's ready so
-we can resume where we left off.
+an I/O resource. When we poll these futures we it will run until they get to a
+leaf function that blocks, where it yields control to the scheduler and waits
+for some resource to signal us that it's ready so we can resume where we left
+off. These futures can nest many non-leaf futures and and will keep
+on going until they get to a leaf-future which returns `Pending` when polled.
 
 ## Runtimes
 
