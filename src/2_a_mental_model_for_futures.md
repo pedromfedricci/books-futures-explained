@@ -11,7 +11,7 @@ assumptions on runtime specifics that can vary a great deal. It's the way I foun
 it easiest to build upon and it's relevant for understanding a lot of real
 implementations you'll find in the async ecosystem.
 
-Finally,please note that the code itself is "pseudo-rust" due to the need for brevity
+Finally, please note that the code itself is "pseudo-rust" due to the need for brevity
 and clarity.
 
 >Click on a page to open a larger view in a new tab.
