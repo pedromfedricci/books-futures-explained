@@ -80,8 +80,8 @@ In contrast to leaf futures, these kind of futures do not themselves represent
 an I/O resource. When we poll these futures they will run until they get to a
 leaf function that blocks, where it yields control to the scheduler and waits
 for some resource to signal us that it's ready so we can resume where we left
-off. These futures can nest many non-leaf futures and and will keep
-on going until they get to a leaf-future which returns `Pending` when polled.
+off. These futures can nest many non-leaf futures and will keep on going until
+they get to a leaf-future which returns `Pending` when polled.
 
 ## Runtimes
 
