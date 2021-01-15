@@ -77,7 +77,7 @@ The key to these tasks is that they're able to yield control to the runtime's
 scheduler and then resume execution again where it left off at a later point.
 
 In contrast to leaf futures, these kind of futures do not themselves represent
-an I/O resource. When we poll these futures we it will run until they get to a
+an I/O resource. When we poll these futures they will run until they get to a
 leaf function that blocks, where it yields control to the scheduler and waits
 for some resource to signal us that it's ready so we can resume where we left
 off. These futures can nest many non-leaf futures and and will keep
@@ -261,10 +261,10 @@ Earlier in this chapter, I mentioned that it is common for the
 executor to create a new Waker for each Future that is registered with the
 executor, but that the Waker is a shared object similar to a `Arc<T>`. One of
 the reasons for this design is that it allows different Reactors the
-ability to Wake a Future.  
+ability to Wake a Future.
 
 As an example of how this can be used, consider how you could create a new type
-of Future that has the ability to be canceled: 
+of Future that has the ability to be canceled:
 
 One way to achieve this would be to add an
 [`AtomicBool`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html)
