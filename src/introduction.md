@@ -21,7 +21,7 @@ articles about async runtimes and executors, and if the rumors are right there
 is more to come from him in the near future.
 
 The way you should go about it is to read this book first, then continue
-reading the [articles from stejpang](https://stjepang.github.io/) to learn more
+reading the [articles from stjepang](https://stjepang.github.io/) to learn more
 about runtimes and how they work, especially:
 
 1. [Build your own block_on()](https://web.archive.org/web/20200511234503/https://stjepang.github.io/2020/01/25/build-your-own-block-on.html)
