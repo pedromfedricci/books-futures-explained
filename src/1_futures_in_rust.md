@@ -78,7 +78,8 @@ scheduler and then resume execution again where it left off at a later point.
 
 In contrast to leaf futures, these kind of futures do not themselves represent
 an I/O resource. When we poll them they will run until they get to a
-leaf-future which returns `Pending` and then yield control to the scheduler.
+leaf-future which returns `Pending` and then yield control to the scheduler
+(which is a part of what we call the runtime).
 
 ## Runtimes
 
