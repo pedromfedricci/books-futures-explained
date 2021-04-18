@@ -35,7 +35,7 @@ for the names that were chosen. Naming is not easy, and I considered renaming
 `Unpin` and `!Unpin` in this book to make them easier to reason about.
 
 However, an experienced member of the Rust community convinced me that that there
-is just too many nuances and edge-cases to consider which are easily overlooked when
+are just too many nuances and edge-cases to consider which are easily overlooked when
 naively giving these markers different names, and I'm convinced that we'll
 just have to get used to them and use them as is.
 
@@ -213,7 +213,7 @@ now. The struct is not self-referential anymore, it holds a pointer to a field
 in a different object. That means we can't rely on the lifetime of `test2.b` to
 be tied to the lifetime of `test2` anymore.
 
-If your still not convinced, this should at least convince you:
+If you're still not convinced, this should at least convince you:
 
 ```rust
 fn main() {
@@ -550,7 +550,7 @@ to be moved even when pinned, so `Pin` will have no effect on such a type.
 
 2. Getting a `&mut T` to a pinned T requires unsafe if `T: !Unpin`. In
 other words: requiring a pinned pointer to a type which is `!Unpin` prevents
-the _user_ of that API from moving that value unless it choses to write `unsafe`
+the _user_ of that API from moving that value unless they choose to write `unsafe`
 code.
 
 3. Pinning does nothing special with memory allocation like putting it into some
