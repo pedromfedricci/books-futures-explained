@@ -289,7 +289,6 @@ struct Test {
 
 impl Test {
     fn new(txt: &str) -> Self {
-        let a = String::from(txt);
         Test {
             a: String::from(txt),
             b: std::ptr::null(),
