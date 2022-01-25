@@ -145,7 +145,7 @@ A green threads example could look something like this:
 > It's not in any way meant to showcase "best practice". Just so we're on
 > the same page.
 
-_**Press the expand icon in the top right corner to show the example code.**_
+_**Press the expand icon in the top right corner to show the example code (you'll actually find a minimal implementation of green threads there)**_
 
 ```rust, edition2021
 # #![feature(naked_functions)]
@@ -343,7 +343,7 @@ _**Press the expand icon in the top right corner to show the example code.**_
 #     );
 # }
 # #[cfg(not(windows))]
-pub fn run() {
+pub fn main() {
     let mut runtime = Runtime::new();
     runtime.init();
     Runtime::spawn(|| {
