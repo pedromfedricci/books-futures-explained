@@ -168,7 +168,7 @@ const VTABLE: RawWakerVTable = unsafe {
     RawWakerVTable::new(
         |s| mywaker_clone(&*(s as *const MyWaker)),   // clone
         |s| mywaker_wake(&*(s as *const MyWaker)),    // wake
-        |s| (*(s as *const MyWaker)).parker.unpark(), // wake by ref (don't decrease refcount)
+        |s| (*(s as *const MyWaker)).thread.unpark(), // wake by ref (don't decrease refcount)
         |s| drop(Arc::from_raw(s as *const MyWaker)), // decrease refcount
     )
 };
