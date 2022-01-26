@@ -91,7 +91,11 @@ Now, let's look at some other options for multitasking. They all have in common
 that they implement a way to do multitasking by having a "userland"
 runtime.
 
-## Green threads
+## Green threads/stackful coroutines
+In this book I'll use the term "green threads" to mean stackful coroutines to differentiate
+them from the other continuation mechanisms described in this chapter. You can, however, see
+the term "green threads" be used to describe a broader set of continuation mechanisms in different
+littrature or discussions on the internet.
 
 Green threads use the same mechanism as an OS - creating a thread for
 each task, setting up a stack, saving the CPU's state, and jumping from one
@@ -102,7 +106,9 @@ such a system) which then continues running a different task.
 
 Rust had green threads once, but they were removed before it hit 1.0. The state
 of execution is stored in each stack so in such a solution there would be no
-need for `async`, `await`, `Future` or `Pin`.
+need for `async`, `await`, `Future` or `Pin`. In many ways, green threads mimics how
+an operating system facilitates concurrency, and implementing them is a great
+learning experience. 
 
 **The typical flow looks like this:**
 
@@ -145,7 +151,7 @@ A green threads example could look something like this:
 > It's not in any way meant to showcase "best practice". Just so we're on
 > the same page.
 
-_**Press the expand icon in the top right corner to show the example code (you'll actually find a minimal implementation of green threads there)**_
+_**Press the expand icon in the top right corner to show the example code (you'll actually find a minimal implementation of green threads)**_
 
 ```rust, edition2021
 # #![feature(naked_functions)]
