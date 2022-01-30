@@ -440,7 +440,7 @@ struct Runtime {
     callbacks: RefCell<HashMap<usize, Box<dyn FnOnce() -> ()>>>,
     next_id: RefCell<usize>,
     evt_sender: Sender<usize>,
-    evt_reciever: Receiver<usize>,
+    evt_receiver: Receiver<usize>,
 }
 
 fn set_timeout(ms: u64, cb: impl FnOnce() + 'static) {
@@ -458,18 +458,18 @@ fn set_timeout(ms: u64, cb: impl FnOnce() + 'static) {
 
 impl Runtime {
     fn new() -> Self {
-        let (evt_sender, evt_reciever) = channel();
+        let (evt_sender, evt_receiver) = channel();
         Runtime {
             callbacks: RefCell::new(HashMap::new()),
             next_id: RefCell::new(1),
             evt_sender,
-            evt_reciever,
+            evt_receiver,
         }
     }
 
     fn run(&self, program: fn()) {
         program();
-        for evt_id in &self.evt_reciever {
+        for evt_id in &self.evt_receiver {
             let cb = self.callbacks.borrow_mut().remove(&evt_id).unwrap();
             cb();
             if self.callbacks.borrow().is_empty() {
